@@ -50,6 +50,7 @@ divide <- function(cell, u1, u2, mu) {
   
   
   # Calculate the symmetrical division after accumulation
+
   b1s <- (cell$b1 + u1) / 2
   b2s <- (cell$b2 + u2) / 2
   

@@ -20,7 +20,7 @@ class Cell
         double v{0.0}; // resulting value of v
         
         double birth{0.0}; // a cell's birth rate
-        double division{0.0}; // ?
+        double division{0.0}; // a cell's total division time
         double divT{0.0}; // a cell's division time
 
         // generate a cell from parameters (typically used when 

@@ -46,7 +46,7 @@ class Asymmetry
 
         // functions etc
         void write_data_headers(); // writes headers to the output file
-        void finalize(); // postprocessing work
+        void write_parameters(); // write parameters to the output file
 
 
     public:

@@ -8,7 +8,10 @@
 class Colony
 {
     public:
-        std::vector<Cell> Cells{}; // the vector of cells of this colony
+        std::vector<Cell> cells{}; // the vector of cells of this colony
+       
+        // store division times in a separate list 
+        std::vector<double> division_times;
 
         Colony(Parameters const &params);
 
