@@ -2,8 +2,8 @@
 
 // the class constructor that builds the simulation object
 Asymmetry::Asymmetry(Parameters const &parameter_object) :
-    params{parameter_object} // initialize data member containing all the parameters
-    ,rd{} // initialize random device that itself finds a random seed
+    rd{} // initialize random device that itself finds a random seed
+    ,params{parameter_object} // initialize data member containing all the parameters
     ,seed{rd()} // initialize the seed
     ,rng_r{seed} // start the random number generator
     ,uniform{0.0,1.0} // initialize uniform distribution to translate probabilities into events

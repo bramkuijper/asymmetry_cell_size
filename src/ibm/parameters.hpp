@@ -30,6 +30,10 @@ class Parameters
         // of the two damage components (the reaction norm slope)
         double mu_alpha_grad[2]{0.01,0.01};
 
+        double init_alpha_m{0.0};
+        double init_b1{0.0};
+        double init_b2{0.0};
+
         // name of the output file name
         std::string file_name{"sim_asymmetry"};
 };

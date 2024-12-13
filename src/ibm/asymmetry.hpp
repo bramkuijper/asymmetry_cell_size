@@ -12,13 +12,13 @@ class Asymmetry
 {
     private:
         unsigned time_step{0};
-
-        // parameters for this simulation
-        Parameters param{};
         
         // random device which is used to generate
         // proper random seeds
         std::random_device rd;
+
+        // parameters for this simulation
+        Parameters param{};
         
         // store the random seed
         // we need to store this so that we can output the
