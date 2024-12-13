@@ -26,8 +26,6 @@ void Asymmetry::run()
 {
     for (time_step = 0; time_step < params.max_time_step; ++time_step)
     {
-
-
     }
     
 } // end run

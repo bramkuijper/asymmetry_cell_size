@@ -1,82 +1,145 @@
-
 #include <random>
 #include "cell.hpp"
 #include "parameters.hpp"
 
-// build a cell with parameters (typically the initial cell of the simulation)
+// build a cell from parameters
+// typically used to build the initial cell of a simulation
+// this is similar to create_cell() in the original R script
 Cell::Cell(Parameters const &params) :
-    b1{params.init_b1},
-    b2{params.init_b2},
-    alpha_m{params.init_alpha_m}
-    alpha_int{params.alpha_int_init},
-    alpha_grad{params.alpha_grad_init},
-{}
+    b1{params.init_b1}, // damage component 1
+    b2{params.init_b2}, // damage component 2
+    alpha_m{params.init_alpha_m},
+    alpha_int{params.init_alpha_int},
+    alpha_grad{params.init_alpha_grad},
+    birth{params.init_birth},
+    v_int{params.init_v_int},
+    v_grad{params.init_v_grad}
+{
+    alpha = alpha_int + alpha_grad * b1;
+    v = v_int + v_grad * b1; // TODO not sure why this is b1 and not b2
+
+    // how generalizable is this function for division time?
+    divT = division_time();
+
+    // one only seems to set this variable once // TODO
+    division = birth + divT;
+}
+
+double Cell::division_time()
+{
+    return(1.0 / (3.0 * b1 * b1 
+            - 1.0 / 3.0 * std::pow(b1, 3.0) 
+            - 2 * b2 * b2 + 4 * b1 * b2 
+            + 100 
+            - 1.0/ 20 * std::pow(alpha_m, 3.0)));
+}
 
 // build an offspring cell from parent
+// this is the divide() function in the original 
+// R script
 Cell::Cell(
-        Cell const &parent, // reference to parental cell
+        Cell &parent, // non-const reference to parental cell, as we will modify parent too
         std::mt19937 &rng_r, // reference to random number generator
-        Parameters const &params) : // reference to parameter object
-    alpha_int{parent.alpha_int},
+        Parameters const &params// reference to parameter object (for mutation rates etc)
+        ) : 
+    alpha_int{parent.alpha_int}, // inherit trait loci
     alpha_grad{parent.alpha_grad},
     v_int{parent.v_int},
     v_grad{parent.v_grad},
-    birth{parent.birth}// TODO check this
+    birth{parent.birth}// TODO check what this is
 {
+    // calculate damage values if cells would 
+    // be dividing symmetrically
+    double b1s{0.5 * (parent.b1 + params.u1)};
+    double b2s{0.5 * (parent.b2 + params.u2)};
+    
+    // build asymmetry transmission phenotypes
+    // note parental control over asymmetry
+    alpha = parent.alpha_int + parent.alpha_grad * b1s;
+    v = v_int + v_grad * b1s;
+
+    // calculate direction vector v using reaction norm with b1s
+    double v1_norm = v / (v + 1.0);
+    double v2_norm = 1.0 / (v + 1.0);
+
+    // calculate asymmetry in each component
+    double a1 = alpha * v1_norm;
+    double a2 = alpha * v2_norm;
+
+    a1 = std::min(std::max(a1, 0.0), b1s);
+    a2 = std::min(std::max(a2, 0.0), b2s);
+
+    // assign damage to parent
+    parent.b1 = b1s + a1;
+    parent.b2 = b2s + a2;
+
+    // assign damage to offspring
+    b1 = b1s - a1;
+    b2 = b2s - a2;
+
+    // assign value of alpha_m to both parent and offspring
+    parent.alpha_m = alpha_m =  a1 + a2;
+
+    divT = division_time();
+
+    parent.birth = parent.birth + divT;
+    birth = parent.birth + divT;
+
+    // set up distributions to mutate loci
     std::normal_distribution<double> standard_normal{};
     std::uniform_real_distribution<double> uniform{};
 
     // mutate the various traits
-    if (uniform(rng_r) < par.mu_alpha_int)
+    if (uniform(rng_r) < params.mu_alpha_int)
     {
-        alpha_int += standard_normal(rng_r) * par.sdmu;
+        alpha_int += standard_normal(rng_r) * params.sdmu;
     }
     
-    if (uniform(rng_r) < par.mu_alpha_grad)
+    if (uniform(rng_r) < params.mu_alpha_grad)
     {
-        alpha_grad += standard_normal(rng_r) * par.sdmu;
+        alpha_grad += standard_normal(rng_r) * params.sdmu;
     }
     
-    if (uniform(rng_r) < par.mu_v_int)
+    if (uniform(rng_r) < params.mu_v_int)
     {
-        v_int += standard_normal(rng_r) * par.sdmu;
+        v_int += standard_normal(rng_r) * params.sdmu;
     }
     
-    if (uniform(rng_r) < par.mu_v_grad)
+    if (uniform(rng_r) < params.mu_v_grad)
     {
-        v_grad += standard_normal(rng_r) * par.sdmu;
+        v_grad += standard_normal(rng_r) * params.sdmu;
     }
 
-    // build phenotypes
-    alpha = alpha_int + alpha_grad * b1;
-    v = v_int + v_grad * b1;
 
     // how generalizable is this function for division time?
     divT = 1.0 / (3.0 * b1 * b1 
             - 1.0 / 3.0 * std::pow(b1, 3.0) 
             - 2 * b2 * b2 + 4 * b1 * b2 
             + 100 
-            - 1.0/ 20 * std::pow(alpha_m, 3.0))
+            - 1.0/ 20 * std::pow(alpha_m, 3.0));
 
     division = birth + divT;
 } // end offspring-from-parent-constructor
 
 // copy constructor
+// this is only relevant when you need to 
+// move cells around from one vector to
+// another without them giving birth to others
 Cell::Cell(Cell const &other) :
-    b1{other.b1};
-    b2{other.b2};
-    alpha_m{other.alpha_m};
-    alpha_int{other.alpha_int};
-    alpha_grad{other.alpha_grad};
-    alpha{other.alpha};
+    b1{other.b1},
+    b2{other.b2},
+    alpha_m{other.alpha_m},
+    alpha_int{other.alpha_int},
+    alpha_grad{other.alpha_grad},
+    alpha{other.alpha},
     
-    v_int{other.v_int};
-    v_grad{other.v_grad};
-    v{other.v};
+    v_int{other.v_int},
+    v_grad{other.v_grad},
+    v{other.v},
     
-    birth{other.birth};
-    division{other.division};
-    divT{other.divT};
+    birth{other.birth},
+    division{other.division},
+    divT{other.divT}
 {} // end copy constructor
 
 // assignment operator

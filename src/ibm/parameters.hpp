@@ -20,19 +20,38 @@ class Parameters
         unsigned long max_time_step{1000};
 
         // accumulation of damage for the two components
-        double u[2]{0.0,0.0};
+        double u1{0.1};
+        double u2{0.1};
 
-        // mutation rates of baseline division asymmetry for each
-        // of the two damage components (the intercept)
-        double mu_alpha[2]{0.01,0.01}; 
+        // mutation rates of intercept in division asymmetry for 
+        // damage component 1
+        double mu_alpha_int{0.01}; 
         
-        // mutation rates of plasticity in division asymmetry for each
-        // of the two damage components (the reaction norm slope)
-        double mu_alpha_grad[2]{0.01,0.01};
+        // mutation rates of plasticity in division asymmetry for 
+        // damage component 1
+        double mu_alpha_grad{0.01};
+        
+        // mutation rates of intercept in division asymmetry for 
+        // damage component 2
+        double mu_v_int{0.01}; 
+        
+        // mutation rates of plasticity in division asymmetry for 
+        // damage component 2
+        double mu_v_grad{0.01};
+
+        double sdmu{0.05};
 
         double init_alpha_m{0.0};
         double init_b1{0.0};
         double init_b2{0.0};
+
+        double init_alpha_int{0.5}; // TODO: what should be the proper starting val here
+        double init_alpha_grad{0.0}; 
+
+        double init_v_int{0.5}; 
+        double init_v_grad{0.0}; 
+
+        double init_birth{0.5}; // TODO what the hell should we take here as initial value
 
         // name of the output file name
         std::string file_name{"sim_asymmetry"};
