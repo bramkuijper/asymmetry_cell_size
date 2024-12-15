@@ -55,6 +55,8 @@ class Parameters
 
         // name of the output file name
         std::string file_name{"sim_asymmetry"};
+
+        unsigned output_interval{1};
 };
 
 
