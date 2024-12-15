@@ -56,7 +56,6 @@ void Asymmetry::write_data_headers()
                     << "mean_v_int" << ";"
                     << "mean_v_grad" << ";"
                     << "mean_v" << ";"
-                    << "mean_alpha" << ";"
                     << "mean_birth" << ";"
                     << "mean_division" << ";"
                     << "mean_divT" << ";"
@@ -69,7 +68,6 @@ void Asymmetry::write_data_headers()
                     << "var_v_int" << ";"
                     << "var_v_grad" << ";"
                     << "var_v" << ";"
-                    << "var_alpha" << ";"
                     << "var_birth" << ";"
                     << "var_division" << ";"
                     << "var_divT" << ";" << std::endl;
@@ -208,7 +206,6 @@ void Asymmetry::write_data()
                     << mean_v_int << ";"
                     << mean_v_grad << ";"
                     << mean_v << ";"
-                    << mean_alpha << ";"
                     << mean_birth << ";"
                     << mean_division << ";"
                     << mean_divT << ";"
@@ -221,7 +218,6 @@ void Asymmetry::write_data()
                     << var_v_int << ";"
                     << var_v_grad << ";"
                     << var_v << ";"
-                    << var_alpha << ";"
                     << var_birth << ";"
                     << var_division << ";"
                     << var_divT << ";" << std::endl;
