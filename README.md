@@ -20,9 +20,10 @@ make
 ```
 
 ## Simulation output
-Output will be stored in the semicolon-separated text file `sim_asymmetry`. Note that at the bottom of the output file there is a listing with parameters, so simply running `read.table()` in R will mix character data with numbers if one is not careful.
+Output will be stored in the semicolon-separated text file `sim_asymmetry`. Note that at the bottom of the output file there is a listing with parameters, so simply running `read.table()` without provding an `nrows` argument in `R` will mix character data with numbers if one is not careful.
 
 There is an `R`-script `plot_output.r` which can be used to make a pdf plot giving you an initial overview. Again on any Linux system with `R`, and the packages `tidyverse` and `patchwork` installed, you can simply run on any bash shell:
 ```
 ./plot_output.r sim_asymmetry
 ```
+The resulting graph is then available in the file `graph_sim_asymmetry.pdf`.
