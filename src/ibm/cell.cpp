@@ -19,19 +19,23 @@ Cell::Cell(Parameters const &params) :
     v = v_int + v_grad * b1; // TODO not sure why this is b1 and not b2
 
     // how generalizable is this function for division time?
-    divT = division_time();
+    divT = division_time(b1, b2, alpha_m);
 
     // one only seems to set this variable once // TODO
     division = birth + divT;
 }
 
-double Cell::division_time()
+double Cell::division_time(
+        double const b1s,
+        double const b2s,
+        double const alpha_m_s
+        ) const
 {
-    return(1.0 / (3.0 * b1 * b1 
-            - 1.0 / 3.0 * std::pow(b1, 3.0) 
-            - 2 * b2 * b2 + 4 * b1 * b2 
+    return(1.0 / (3.0 * b1s * b1s 
+            - 1.0 / 3.0 * std::pow(b1s, 3.0) 
+            - 2 * b2s * b2s + 4 * b1s * b2s 
             + 100 
-            - 1.0/ 20 * std::pow(alpha_m, 3.0)));
+            - 1.0/ 20 * std::pow(alpha_m_s, 3.0)));
 }
 
 // build an offspring cell from parent
@@ -56,6 +60,7 @@ Cell::Cell(
     // build asymmetry transmission phenotypes
     // note parental control over asymmetry
     alpha = parent.alpha_int + parent.alpha_grad * b1s;
+
     v = v_int + v_grad * b1s;
 
     // calculate direction vector v using reaction norm with b1s
@@ -80,10 +85,21 @@ Cell::Cell(
     // assign value of alpha_m to both parent and offspring
     parent.alpha_m = alpha_m =  a1 + a2;
 
-    divT = division_time();
+    // calculate new division time for parent
+    parent.divT = division_time(parent.b1,
+            parent.b2,
+            parent.alpha_m
+            );
 
-    parent.birth = parent.birth + divT;
+    // calculate division time for offspring
+    divT = division_time(
+            b1,
+            b2,
+            alpha_m);
+
+    parent.birth = parent.birth + parent.divT;
     birth = parent.birth + divT;
+    division = birth + divT;
 
     // set up distributions to mutate loci
     std::normal_distribution<double> standard_normal{};
@@ -110,15 +126,6 @@ Cell::Cell(
         v_grad += standard_normal(rng_r) * params.sdmu;
     }
 
-
-    // how generalizable is this function for division time?
-    divT = 1.0 / (3.0 * b1 * b1 
-            - 1.0 / 3.0 * std::pow(b1, 3.0) 
-            - 2 * b2 * b2 + 4 * b1 * b2 
-            + 100 
-            - 1.0/ 20 * std::pow(alpha_m, 3.0));
-
-    division = birth + divT;
 } // end offspring-from-parent-constructor
 
 // copy constructor

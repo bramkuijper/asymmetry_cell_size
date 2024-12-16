@@ -21,24 +21,24 @@ void Asymmetry::write_parameters()
 {
     data_file << std::endl 
         << std::endl 
-        << "seed" << seed << std::endl
-        << "ncolories" << param.ncolonies << std::endl
-        << "min_cells_colony" << param.min_cells_colony << std::endl
-        << "max_cells_colony" << param.max_cells_colony << std::endl
-        << "u1" << param.u1 << std::endl
-        << "u2" << param.u2 << std::endl
-        << "mu_alpha_int" << param.mu_alpha_int << std::endl
-        << "mu_alpha_grad" << param.mu_alpha_grad << std::endl
-        << "mu_v_int" << param.mu_v_int << std::endl
-        << "mu_v_grad" << param.mu_v_grad << std::endl
-        << "sdmu" << param.sdmu << std::endl
-        << "init_alpha_m" << param.init_alpha_m << std::endl
-        << "init_b1" << param.init_b1 << std::endl
-        << "init_b2" << param.init_b2 << std::endl
-        << "init_alpha_int" << param.init_alpha_int << std::endl
-        << "init_alpha_grad" << param.init_alpha_grad << std::endl
-        << "init_v_int" << param.init_v_int << std::endl
-        << "init_v_grad" << param.init_v_grad << std::endl
+        << "seed;" << seed << std::endl
+        << "ncolories;" << param.ncolonies << std::endl
+        << "min_cells_colony;" << param.min_cells_colony << std::endl
+        << "max_cells_colony;" << param.max_cells_colony << std::endl
+        << "u1;" << param.u1 << std::endl
+        << "u2;" << param.u2 << std::endl
+        << "mu_alpha_int;" << param.mu_alpha_int << std::endl
+        << "mu_alpha_grad;" << param.mu_alpha_grad << std::endl
+        << "mu_v_int;" << param.mu_v_int << std::endl
+        << "mu_v_grad;" << param.mu_v_grad << std::endl
+        << "sdmu;" << param.sdmu << std::endl
+        << "init_alpha_m;" << param.init_alpha_m << std::endl
+        << "init_b1;" << param.init_b1 << std::endl
+        << "init_b2;" << param.init_b2 << std::endl
+        << "init_alpha_int;" << param.init_alpha_int << std::endl
+        << "init_alpha_grad;" << param.init_alpha_grad << std::endl
+        << "init_v_int;" << param.init_v_int << std::endl
+        << "init_v_grad;" << param.init_v_grad << std::endl
         << "init_birth;" << param.init_birth << std::endl;
 }
 
@@ -139,7 +139,7 @@ void Asymmetry::write_data()
             x = cell_iter->alpha;
             mean_alpha += x;
             ss_alpha += x * x;
-            
+
             x = cell_iter->v_int;
             mean_v_int += x;
             ss_v_int += x * x;
@@ -177,7 +177,6 @@ void Asymmetry::write_data()
     mean_v_int /= n;
     mean_v_grad /= n;
     mean_v /= n;
-    mean_alpha /= n;
     mean_birth /= n;
     mean_division /= n;
     mean_divT /= n;
@@ -194,6 +193,7 @@ void Asymmetry::write_data()
     double var_birth = ss_birth/n - mean_birth * mean_birth; 
     double var_division = ss_division/n - mean_division * mean_division; 
     double var_divT = ss_divT/n - mean_divT * mean_divT; 
+
 
     data_file << time_step << ";"
                     << n << ";"
@@ -249,6 +249,8 @@ void Asymmetry::run()
             write_data();
         }
     }
+
+    write_parameters();
 } // end run
 
 

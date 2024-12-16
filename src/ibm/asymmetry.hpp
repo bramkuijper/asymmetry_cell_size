@@ -11,7 +11,7 @@
 class Asymmetry
 {
     private:
-        unsigned time_step{0};
+        unsigned long time_step{0};
         
         // random device which is used to generate
         // proper random seeds

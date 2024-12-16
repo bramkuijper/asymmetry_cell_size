@@ -46,7 +46,7 @@ class Cell
         void operator=(Cell const &other);
 
         // function that calculates division time
-        double division_time();
+        double division_time(double const b1s, double const b2s, double const alpha_m) const;
 }; // end declaration of Cell() class
 
 #endif

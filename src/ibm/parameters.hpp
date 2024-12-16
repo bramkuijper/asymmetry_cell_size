@@ -17,7 +17,7 @@ class Parameters
         unsigned max_cells_colony{100};
 
         // maximum number of time steps the simulation runs
-        unsigned long max_time_step{1000};
+        unsigned long max_time_step{1000000};
 
         // accumulation of damage for the two components
         double u1{0.1};
@@ -25,19 +25,19 @@ class Parameters
 
         // mutation rates of intercept in division asymmetry for 
         // damage component 1
-        double mu_alpha_int{0.01}; 
+        double mu_alpha_int{0.05}; 
         
         // mutation rates of plasticity in division asymmetry for 
         // damage component 1
-        double mu_alpha_grad{0.01};
+        double mu_alpha_grad{0.0};
         
         // mutation rates of intercept in division asymmetry for 
         // damage component 2
-        double mu_v_int{0.01}; 
+        double mu_v_int{0.05}; 
         
         // mutation rates of plasticity in division asymmetry for 
         // damage component 2
-        double mu_v_grad{0.01};
+        double mu_v_grad{0.0};
 
         double sdmu{0.05};
 
@@ -56,7 +56,7 @@ class Parameters
         // name of the output file name
         std::string file_name{"sim_asymmetry"};
 
-        unsigned output_interval{1};
+        unsigned output_interval{10};
 };
 
 

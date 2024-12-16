@@ -1,5 +1,6 @@
 #include <cassert>
 #include <random>
+#include <iostream>
 #include "colony.hpp"
 #include "parameters.hpp"
 
@@ -25,6 +26,7 @@ void Colony::remove_random_cell(
     assert(cells.size() > 0);
 
     // uniform distribution
+    // to sample random cell
     std::uniform_int_distribution<unsigned> 
         random_cell_distribution{0, 
             static_cast<unsigned>(cells.size() - 1)};
@@ -40,9 +42,17 @@ void Colony::remove_random_cell(
 
     // remove division rate from stack, same fashion
     division_rates[cell_to_remove_idx] = division_rates.back();
+
+    assert(division_rates[cell_to_remove_idx] == 1.0 / cells[cell_to_remove_idx].division);
     division_rates.pop_back();
+
+    assert(division_rates.size() == cells.size());
 } // end remove_random_cell()
 
+
+// select a cell based on the division rate
+// in this colony and have it divide into 
+// parent and offspring cell
 void Colony::select_and_divide(
         std::mt19937 &rng_r,
         Parameters const &param
@@ -77,7 +87,7 @@ void Colony::select_and_divide(
     assert(division > 0.0);
     assert(division_offspring > 0.0);
 
-    // update division rate corrresponding to this cells index
+    // update division rate corrresponding to this cell's index
     division_rates[parent_cell_idx] = 1.0 / division;
 
     // add offspring to stack
