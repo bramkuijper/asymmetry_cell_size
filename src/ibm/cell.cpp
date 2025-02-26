@@ -93,18 +93,25 @@ Cell::Cell(
             parent.alpha_m
             );
 
+    divT = division_time(b1,
+            b2,
+            alpha_m);
+
     // parent effectively gets 'reborn' after division into a new 
     // cell hence update its time of birth
     // so that birth(t+1) = birth(t) + divT
     parent.birth = parent.birth + parent.divT;
 
     // time when parent will divide again after it is 'reborn' is then:
-    // division = birth(t+1) + divT = birth(t) + 2 divT
+    // division = birth(t+1) + parent.divT = birth(t) + 2 parent.divT
     parent.division = parent.birth + parent.divT;
     
-    // same values for offspring birth and division
+    // values for offspring birth and division
     birth = parent.birth;
-    division = parent.division;
+    
+    // time when offspring will divide again after it is born is then:
+    // division = birth(t+1) + offspring.divT = birth(t) + parent.divT + offspring.divT
+    division = parent.birth + divT;
 
     parent.is_parent = true;
     is_parent = false;
