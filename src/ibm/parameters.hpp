@@ -8,7 +8,7 @@ class Parameters
     public:
         
         // total number of colonies in the metapopulation
-        unsigned ncolonies{200};
+        unsigned ncolonies{100};
 
         // minimum and starting number of cells in a colony
         unsigned min_cells_colony{1};
@@ -17,7 +17,7 @@ class Parameters
         unsigned max_cells_colony{100};
 
         // maximum number of time steps the simulation runs
-        unsigned long max_time_step{1000000};
+        unsigned long max_time_step{200};
 
         // accumulation of damage for the two components
         double u1{0.1};
@@ -56,7 +56,7 @@ class Parameters
         // name of the output file name
         std::string file_name{"sim_asymmetry"};
 
-        unsigned output_interval{10};
+        unsigned output_interval{1};
 };
 
 

@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 #include "asymmetry.hpp"
 
 // the class constructor that builds the simulation object
@@ -234,9 +235,10 @@ void Asymmetry::run()
                 metapopulation_iter != metapopulation.end();
                 ++metapopulation_iter)
         {
-            if (metapopulation_iter->cells.size() == 
+            if (metapopulation_iter->cells.size() >= 
                     param.max_cells_colony)
             {
+                std::cout << time_step << " kut" << std::endl;
                 metapopulation_iter->remove_random_cell(rng_r);
             }
 
