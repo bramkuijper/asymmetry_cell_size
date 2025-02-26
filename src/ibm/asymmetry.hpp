@@ -42,13 +42,14 @@ class Asymmetry
 
         // data file for output 
         std::ofstream data_file;
+        std::ofstream distribution_file;
 
 
         // functions etc
         void write_data_headers(); // writes headers to the output file
         void write_parameters(); // write parameters to the output file
         void write_data(); // write parameters to the output file
-
+        void write_out_whole_population(); // write out complete population
 
     public:
         Asymmetry(Parameters const &parameter_object);

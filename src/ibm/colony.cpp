@@ -43,7 +43,10 @@ void Colony::remove_random_cell(
     // remove division rate from stack, same fashion
     division_rates[cell_to_remove_idx] = division_rates.back();
 
-    assert(division_rates[cell_to_remove_idx] == 1.0 / cells[cell_to_remove_idx].division);
+    assert(division_rates[cell_to_remove_idx] == 
+            1.0 / cells[cell_to_remove_idx].division);
+
+    // also remove division rate corresponding to the last cell
     division_rates.pop_back();
 
     assert(division_rates.size() == cells.size());

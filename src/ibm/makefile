@@ -3,7 +3,7 @@
 # typing 'make' once in the directory with the source code
 
 CXX=g++
-CXXFLAGS=-Wall -ggdb -std=c++20
+CXXFLAGS=-Wall -O3 -std=c++20
 
 EXE=asymmetry.exe
 CPP=main.cpp asymmetry.cpp colony.cpp cell.cpp

@@ -22,6 +22,7 @@ class Cell
         double birth{0.0}; // a cell's birth rate
         double division{0.0}; // a cell's total division time
         double divT{0.0}; // a cell's division time
+        bool is_parent{true};
 
         // generate a cell from parameters (typically used when 
         // initializing a colony)

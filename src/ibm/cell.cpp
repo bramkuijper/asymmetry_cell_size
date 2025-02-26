@@ -1,4 +1,6 @@
 #include <random>
+#include <cassert>
+#include <iostream>
 #include "cell.hpp"
 #include "parameters.hpp"
 
@@ -91,15 +93,23 @@ Cell::Cell(
             parent.alpha_m
             );
 
-    // calculate division time for offspring
-    divT = division_time(
-            b1,
-            b2,
-            alpha_m);
-
+    // parent effectively gets 'reborn' after division into a new 
+    // cell hence update its time of birth
+    // so that birth(t+1) = birth(t) + divT
     parent.birth = parent.birth + parent.divT;
-    birth = parent.birth + divT;
-    division = birth + divT;
+
+    // time when parent will divide again after it is 'reborn' is then:
+    // division = birth(t+1) + divT = birth(t) + 2 divT
+    parent.division = parent.birth + parent.divT;
+    
+    // same values for offspring birth and division
+    birth = parent.birth;
+    division = parent.division;
+
+    parent.is_parent = true;
+    is_parent = false;
+
+    assert(division >= birth);
 
     // set up distributions to mutate loci
     std::normal_distribution<double> standard_normal{};
@@ -146,8 +156,10 @@ Cell::Cell(Cell const &other) :
     
     birth{other.birth},
     division{other.division},
-    divT{other.divT}
-{} // end copy constructor
+    divT{other.divT},
+    is_parent{other.is_parent}
+{
+}
 
 // assignment operator
 void Cell::operator=(Cell const &other)
@@ -166,6 +178,7 @@ void Cell::operator=(Cell const &other)
     birth = other.birth;
     division = other.division;
     divT = other.divT;
+    is_parent = other.is_parent;
 }// end assignment operator
 
 
