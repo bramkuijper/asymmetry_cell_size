@@ -11,10 +11,94 @@ Asymmetry::Asymmetry(Parameters const &parameter_object) :
     ,colony_sampler{0, param.ncolonies - 1 } // uniform distribution to randomly sample colonies
     ,metapopulation(param.ncolonies, Colony(param)) // initialize all the colonies
     ,data_file{param.file_name} // initialize the output file
+    ,distribution_file{param.distribution_file_name} // initialize the output file
 {
     // provide headers to the output file
     write_data_headers();
 }
+
+void Asymmetry::write_out_whole_population()
+{
+    // Write header
+    distribution_file
+
+        << "colony_id"   << ";"
+
+        << "b1"          << ";"
+
+        << "b2"          << ";"
+
+        << "alpha_m"     << ";"
+
+        << "alpha_int"   << ";"
+
+        << "alpha_grad"  << ";"
+
+        << "alpha"       << ";"
+
+        << "v_int"       << ";"
+
+        << "v_grad"      << ";"
+
+        << "v"           << ";"
+
+        << "birth"       << ";"
+
+        << "division"    << ";"
+
+        << "divT" << ";"
+        
+        << "is_parent"
+
+        << std::endl;
+
+ 
+
+    for (unsigned colony_idx = 0; colony_idx < metapopulation.size(); ++colony_idx)
+
+    {
+
+        for (auto const &cell : metapopulation[colony_idx].cells)
+
+        {
+
+            distribution_file
+
+                << colony_idx          << ";"
+
+                << cell.b1             << ";"
+
+                << cell.b2             << ";"
+
+                << cell.alpha_m        << ";"
+
+                << cell.alpha_int      << ";"
+
+                << cell.alpha_grad     << ";"
+
+                << cell.alpha          << ";"
+
+                << cell.v_int          << ";"
+
+                << cell.v_grad         << ";"
+
+                << cell.v              << ";"
+
+                << cell.birth          << ";"
+
+                << cell.division       << ";"
+
+                << cell.divT            << ";"
+                
+                << cell.is_parent
+
+                << std::endl;
+
+        }
+
+    }
+    distribution_file.close();
+}// end write_out_whole_population
 
 // write the parameters to the output file
 void Asymmetry::write_parameters()
@@ -249,6 +333,8 @@ void Asymmetry::run()
             write_data();
         }
     }
+
+    write_out_whole_population();
 
     write_parameters();
 } // end run

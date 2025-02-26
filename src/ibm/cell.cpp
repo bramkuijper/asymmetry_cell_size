@@ -1,4 +1,6 @@
 #include <random>
+#include <cassert>
+#include <iostream>
 #include "cell.hpp"
 #include "parameters.hpp"
 
@@ -98,8 +100,12 @@ Cell::Cell(
             alpha_m);
 
     parent.birth = parent.birth + parent.divT;
+    parent.is_parent = true;
+    is_parent = false;
     birth = parent.birth + divT;
     division = birth + divT;
+
+    assert(division >= birth);
 
     // set up distributions to mutate loci
     std::normal_distribution<double> standard_normal{};
@@ -146,8 +152,10 @@ Cell::Cell(Cell const &other) :
     
     birth{other.birth},
     division{other.division},
-    divT{other.divT}
-{} // end copy constructor
+    divT{other.divT},
+    is_parent{other.is_parent}
+{
+}
 
 // assignment operator
 void Cell::operator=(Cell const &other)
@@ -166,6 +174,7 @@ void Cell::operator=(Cell const &other)
     birth = other.birth;
     division = other.division;
     divT = other.divT;
+    is_parent = other.is_parent;
 }// end assignment operator
 
 
